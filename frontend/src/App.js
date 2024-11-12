@@ -1,21 +1,46 @@
 // src/App.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ProductForm from './components/ProductForm';
 import ProductList from './components/ProductList';
-import './styles/styles.css';
+import axios from 'axios';
 
 function App() {
     const [products, setProducts] = useState([]);
 
-    const addProduct = (newProduct) => {
-        setProducts([...products, newProduct]);
+    // Fetch existing products from the backend on initial load
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                const response = await axios.get('http://localhost:5000/api/product');
+                setProducts(response.data);
+            } catch (error) {
+                console.error('Error fetching products:', error);
+            }
+        };
+
+        fetchProducts();
+    }, []);
+
+    // Function to add a new product
+    const handleAddProduct = (product) => {
+        setProducts([...products, product]);
+    };
+
+    // Function to delete a product by ID
+    const handleDeleteProduct = async (productId) => {
+        try {
+            await axios.delete(`http://localhost:5000/api/product/${productId}`);
+            setProducts(products.filter((product) => product.id !== productId));
+        } catch (error) {
+            console.error('Error deleting product:', error);
+        }
     };
 
     return (
-        <div className="container">
-            <h1>Product Listing</h1>
-            <ProductForm onAddProduct={addProduct} />
-            <ProductList products={products} />
+        <div className="App">
+            <h1>Product Management</h1>
+            <ProductForm onAddProduct={handleAddProduct} />
+            <ProductList products={products} onDelete={handleDeleteProduct} />
         </div>
     );
 }

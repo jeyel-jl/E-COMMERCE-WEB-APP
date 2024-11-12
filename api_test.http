@@ -3,7 +3,7 @@ Content-Type: application/json
 
 {
   "title": "Sample Product",
-  "price": 15.99,
-  "description": "A sample product for testing",
+  "price": 20.99,
+  "description": "A great product",
   "quantity": 10
 }

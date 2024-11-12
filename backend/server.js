@@ -6,9 +6,8 @@ const productRoutes = require('./routes/productRoutes');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.use('/api/product', productRoutes);
 app.use(express.json());
-
+app.use('/api/product', productRoutes);
 app.get('/', (req, res) => {
   res.send('E-commerce API Running');
 });

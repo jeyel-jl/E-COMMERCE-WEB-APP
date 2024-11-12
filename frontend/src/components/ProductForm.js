@@ -1,5 +1,6 @@
 // src/components/ProductForm.js
 import React, { useState } from 'react';
+import axios from 'axios';
 
 function ProductForm({ onAddProduct }) {
     const [title, setTitle] = useState('');
@@ -7,13 +8,21 @@ function ProductForm({ onAddProduct }) {
     const [description, setDescription] = useState('');
     const [quantity, setQuantity] = useState('');
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        onAddProduct({ title, price, description, quantity });
-        setTitle('');
-        setPrice('');
-        setDescription('');
-        setQuantity('');
+        const newProduct = { title, price, description, quantity };
+
+        try {
+            // Send the new product to the backend
+            const response = await axios.post('http://localhost:5000/api/product', newProduct);
+            onAddProduct(response.data); // Add the new product to the product list
+            setTitle('');
+            setPrice('');
+            setDescription('');
+            setQuantity('');
+        } catch (error) {
+            console.error('Error adding product:', error);
+        }
     };
 
     return (

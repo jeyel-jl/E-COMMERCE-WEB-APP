@@ -20,4 +20,20 @@ exports.getProducts = async (req, res) => {
     }
 };
 
-// Get product by ID, update, and delete methods would go here
+// Delete a product by ID
+exports.deleteProduct = async (req, res) => {
+    try {
+        const productId = req.params.id; // Get the ID from the URL
+        const product = await Product.findByPk(productId); // Find the product by ID
+
+        if (!product) {
+            return res.status(404).json({ message: 'Product not found' }); // If product not found, return 404
+        }
+
+        await product.destroy(); // Delete the product
+        res.status(200).json({ message: 'Product deleted successfully' }); // Send success response
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+

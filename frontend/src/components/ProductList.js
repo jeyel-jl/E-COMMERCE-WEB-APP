@@ -2,11 +2,11 @@
 import React from 'react';
 import ProductCard from './ProductCard';
 
-function ProductList({ products }) {
+function ProductList({ products, onDelete }) {
     return (
         <div className="product-cards">
-            {products.map((product, index) => (
-                <ProductCard key={index} product={product} />
+            {products.map((product) => (
+                <ProductCard key={product.id} product={product} onDelete={onDelete} />
             ))}
         </div>
     );
