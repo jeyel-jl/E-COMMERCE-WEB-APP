@@ -3,6 +3,13 @@ import React, { useState, useEffect } from 'react';
 import ProductForm from './components/ProductForm';
 import ProductList from './components/ProductList';
 import axios from 'axios';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import SignIn from './components/SignIn';
+import AdminPage from './components/AdminPage';
+import CustomerPage from './components/CustomerPage';
+
+
 
 function App() {
     const [products, setProducts] = useState([]);
@@ -42,6 +49,66 @@ function App() {
             <ProductForm onAddProduct={handleAddProduct} />
             <ProductList products={products} onDelete={handleDeleteProduct} />
         </div>
+    );
+}
+
+function App() {
+    return (
+        <Router>
+            <Routes>
+                <Route path="/" element={<SignIn />} /> {/* Default Sign-In page */}
+                <Route path="/admin" element={<AdminPage />} />
+                <Route path="/customer" element={<CustomerPage />} />
+            </Routes>
+        </Router>
+    );
+}
+
+function App() {
+    // Mock states for authentication and roles
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [userRole, setUserRole] = useState(null);
+
+    // Function to handle login
+    const handleLogin = (role) => {
+        setIsAuthenticated(true);
+        setUserRole(role);
+    };
+
+    return (
+        <Router>
+            <Routes>
+                {/* Default route for Sign-In */}
+                <Route
+                    path="/"
+                    element={<SignIn onLogin={handleLogin} />}
+                />
+
+                {/* Protected route for Admin */}
+                <Route
+                    path="/admin"
+                    element={
+                        <ProtectedRoute
+                            isAuthenticated={isAuthenticated && userRole === 'admin'}
+                        >
+                            <AdminPage />
+                        </ProtectedRoute>
+                    }
+                />
+
+                {/* Protected route for Customer */}
+                <Route
+                    path="/customer"
+                    element={
+                        <ProtectedRoute
+                            isAuthenticated={isAuthenticated && userRole === 'customer'}
+                        >
+                            <CustomerPage />
+                        </ProtectedRoute>
+                    }
+                />
+            </Routes>
+        </Router>
     );
 }
 

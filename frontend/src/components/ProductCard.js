@@ -1,4 +1,3 @@
-// src/components/ProductCard.js
 import React from 'react';
 
 function ProductCard({ product, onDelete }) {
@@ -12,5 +11,4 @@ function ProductCard({ product, onDelete }) {
         </div>
     );
 }
-
 export default ProductCard;
